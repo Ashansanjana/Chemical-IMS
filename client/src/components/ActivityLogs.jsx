@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { getToken } from '../lib/auth'
+import { API_URL } from '../lib/api'
 import './ActivityLogs.css'
 
 export default function ActivityLogs() {
@@ -25,7 +26,7 @@ export default function ActivityLogs() {
             if (filters.endDate) params.append('endDate', filters.endDate)
             params.append('limit', '50')
 
-            const response = await fetch(`/api/activity?${params.toString()}`, {
+            const response = await fetch(`${API_URL}/api/activity?${params.toString()}`, {
                 headers: { 'Authorization': `Bearer ${getToken()}` }
             })
             const data = await response.json()

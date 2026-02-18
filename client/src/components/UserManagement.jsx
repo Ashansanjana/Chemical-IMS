@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { getToken } from '../lib/auth'
+import { API_URL } from '../lib/api'
 import './UserManagement.css'
 
 export default function UserManagement() {
@@ -22,7 +23,7 @@ export default function UserManagement() {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('/api/users', {
+            const response = await fetch(`${API_URL}/api/users`, {
                 headers: { 'Authorization': `Bearer ${getToken()}` }
             })
             const data = await response.json()
@@ -63,7 +64,7 @@ export default function UserManagement() {
         e.preventDefault()
 
         try {
-            const url = editingUser ? `/api/users/${editingUser.id}` : '/api/users'
+            const url = editingUser ? `${API_URL}/api/users/${editingUser.id}` : `${API_URL}/api/users`
             const method = editingUser ? 'PUT' : 'POST'
 
             const payload = { ...formData }
@@ -99,7 +100,7 @@ export default function UserManagement() {
         if (!confirm('Are you sure you want to activate this user?')) return
 
         try {
-            const response = await fetch(`/api/users/${userId}`, {
+            const response = await fetch(`${API_URL}/api/users/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,7 +127,7 @@ export default function UserManagement() {
         if (!confirm('Are you sure you want to deactivate this user?')) return
 
         try {
-            const response = await fetch(`/api/users/${userId}`, {
+            const response = await fetch(`${API_URL}/api/users/${userId}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${getToken()}` }
             })

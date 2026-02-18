@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { getUser } from '../lib/auth'
+import { API_URL } from '../lib/api'
 import toast from 'react-hot-toast'
 
 export default function UpdateStockForm() {
@@ -102,7 +103,7 @@ export default function UpdateStockForm() {
             // Check if stock is low and notify
             if (newStock <= chemical.low_stock_threshold) {
                 try {
-                    await fetch('/api/notifications/check-low-stock', {
+                    await fetch(`${API_URL}/api/notifications/check-low-stock`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ chemicalId: selectedChemical })

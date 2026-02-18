@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getToken } from '../lib/auth'
+import { API_URL } from '../lib/api'
 import './StockTransactions.css'
 
 export default function StockTransactions() {
@@ -33,7 +34,7 @@ export default function StockTransactions() {
             if (filters.chemicalId) queryParams.append('chemicalId', filters.chemicalId)
             if (filters.actionType) queryParams.append('actionType', filters.actionType)
 
-            const response = await fetch(`/api/stock/transactions?${queryParams}`, {
+            const response = await fetch(`${API_URL}/api/stock/transactions?${queryParams}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -54,7 +55,7 @@ export default function StockTransactions() {
     const fetchAdminUsers = async () => {
         try {
             const token = getToken()
-            const response = await fetch('/api/users', {
+            const response = await fetch(`${API_URL}/api/users`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

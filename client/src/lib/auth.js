@@ -1,5 +1,6 @@
 const TOKEN_KEY = 'auth_token'
 const USER_KEY = 'auth_user'
+import { API_URL } from './api'
 
 /**
  * Save authentication data to localStorage
@@ -43,7 +44,7 @@ export function clearAuth() {
  * Login API call
  */
 export async function login(username, password) {
-    const response = await fetch('/api/auth/login', {
+    const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -75,7 +76,7 @@ export async function verifyToken() {
     if (!token) return false
 
     try {
-        const response = await fetch('/api/auth/verify', {
+        const response = await fetch(`${API_URL}/api/auth/verify`, {
             headers: { 'Authorization': `Bearer ${token}` }
         })
 
