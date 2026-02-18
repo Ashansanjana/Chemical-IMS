@@ -44,18 +44,28 @@ export function clearAuth() {
  * Login API call
  */
 export async function login(username, password) {
-    const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    })
-
-    if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Login failed')
+    let response
+    try {
+        response = await fetch(`${API_URL}/api/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        })
+    } catch (networkError) {
+        throw new Error('Cannot reach server. Check your connection or backend URL.')
     }
 
-    const data = await response.json()
+    let data
+    try {
+        data = await response.json()
+    } catch {
+        throw new Error(`Server error (${response.status}). Backend may be down.`)
+    }
+
+    if (!response.ok) {
+        throw new Error(data.error || 'Login failed')
+    }
+
     saveAuth(data.token, data.user)
     return data
 }
