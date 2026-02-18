@@ -1,0 +1,208 @@
+/* Activity Logs - Dark Theme Professional Design */
+.activity-logs {
+    padding: 1.5rem;
+    background: var(--slate-900);
+    min-height: 100vh;
+}
+
+.activity-logs h2 {
+    margin: 0 0 1.5rem 0;
+    color: var(--slate-100);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: var(--slate-800);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    align-items: flex-end;
+    border: 1px solid var(--slate-700);
+}
+
+.filter-group {
+    flex: 1;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--slate-300);
+    font-size: 0.875rem;
+}
+
+.filter-group input,
+.filter-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--slate-600);
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--slate-100);
+    background: var(--slate-700);
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.btn-filter {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-600);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+.btn-filter:hover {
+    background: var(--primary-700);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    transform: translateY(-1px);
+}
+
+.logs-table-container {
+    background: var(--slate-800);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border: 1px solid var(--slate-700);
+}
+
+.logs-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.logs-table th {
+    background: var(--slate-700);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--slate-200);
+    border-bottom: 2px solid var(--slate-600);
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.logs-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--slate-700);
+    font-size: 0.875rem;
+    color: var(--slate-300);
+}
+
+.logs-table tr:hover {
+    background: var(--slate-700);
+}
+
+.logs-table tr:last-child td {
+    border-bottom: none;
+}
+
+.user-subtitle {
+    font-size: 0.75rem;
+    color: var(--slate-400);
+    margin-top: 0.25rem;
+}
+
+.action-badge {
+    display: inline-block;
+    padding: 0.375rem 0.875rem;
+    border-radius: 1.25rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.action-badge.success {
+    background: var(--success-200);
+    color: var(--success-900);
+}
+
+.action-badge.info {
+    background: var(--primary-200);
+    color: var(--primary-900);
+}
+
+.action-badge.danger {
+    background: var(--danger-200);
+    color: var(--danger-900);
+}
+
+.action-badge.primary {
+    background: #f3e8ff;
+    color: #6b21a8;
+}
+
+.action-badge.secondary {
+    background: var(--gray-300);
+    color: var(--gray-800);
+}
+
+.action-badge.default {
+    background: #bfdbfe;
+    color: #1e3a8a;
+}
+
+.log-detail {
+    font-size: 0.75rem;
+    color: var(--slate-400);
+    margin-bottom: 0.375rem;
+    font-family: 'Courier New', monospace;
+}
+
+.json-details {
+    margin-top: 0.5rem;
+}
+
+.json-details summary {
+    cursor: pointer;
+    color: var(--primary-400);
+    font-size: 0.75rem;
+    user-select: none;
+    font-weight: 600;
+    padding: 0.25rem 0;
+}
+
+.json-details summary:hover {
+    color: var(--primary-300);
+    text-decoration: underline;
+}
+
+.json-details pre {
+    margin: 0.75rem 0 0 0;
+    padding: 1rem;
+    background: var(--slate-900);
+    border: 1px solid var(--slate-600);
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    overflow-x: auto;
+    max-width: 500px;
+    font-family: 'Courier New', monospace;
+    color: var(--slate-300);
+    line-height: 1.6;
+}
+
+.loading {
+    text-align: center;
+    padding: 3.75rem;
+    color: var(--slate-400);
+    font-size: 1rem;
+}
