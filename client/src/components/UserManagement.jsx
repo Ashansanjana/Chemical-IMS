@@ -221,72 +221,74 @@ export default function UserManagement() {
                 </button>
             </div>
 
-            <table className="users-table">
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Full Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Status</th>
-                        <th>Last Login</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map(user => (
-                        <tr key={user.id}>
-                            <td>{user.username}</td>
-                            <td>{user.full_name || '-'}</td>
-                            <td>{user.email || '-'}</td>
-                            <td>
-                                <span className={`role-badge ${user.role.toLowerCase()}`}>
-                                    {user.role === 'SUPER_ADMIN' ? 'Super Admin' : 'Admin'}
-                                </span>
-                            </td>
-                            <td>
-                                <span className={`status-badge ${user.is_active ? 'active' : 'inactive'}`}>
-                                    {user.is_active ? 'Active' : 'Inactive'}
-                                </span>
-                            </td>
-                            <td>
-                                {user.last_login
-                                    ? new Date(user.last_login).toLocaleDateString()
-                                    : 'Never'}
-                            </td>
-                            <td>
-                                <button
-                                    className="btn-small btn-edit"
-                                    onClick={() => handleEdit(user)}
-                                >
-                                    Edit
-                                </button>
-                                {user.is_active ? (
-                                    <button
-                                        className="btn-small btn-danger"
-                                        onClick={() => handleDeactivate(user.id)}
-                                    >
-                                        Deactivate
-                                    </button>
-                                ) : (
-                                    <button
-                                        className="btn-small btn-activate"
-                                        onClick={() => handleActivate(user.id)}
-                                    >
-                                        Activate
-                                    </button>
-                                )}
-                                <button
-                                    className="btn-small btn-delete"
-                                    onClick={() => handleDelete(user.id, user.username)}
-                                >
-                                    Delete
-                                </button>
-                            </td>
+            <div className="users-table-wrapper">
+                <table className="users-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Last Login</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {users.map(user => (
+                            <tr key={user.id}>
+                                <td>{user.username}</td>
+                                <td>{user.full_name || '-'}</td>
+                                <td>{user.email || '-'}</td>
+                                <td>
+                                    <span className={`role-badge ${user.role.toLowerCase()}`}>
+                                        {user.role === 'SUPER_ADMIN' ? 'Super Admin' : 'Admin'}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span className={`status-badge ${user.is_active ? 'active' : 'inactive'}`}>
+                                        {user.is_active ? 'Active' : 'Inactive'}
+                                    </span>
+                                </td>
+                                <td>
+                                    {user.last_login
+                                        ? new Date(user.last_login).toLocaleDateString()
+                                        : 'Never'}
+                                </td>
+                                <td>
+                                    <button
+                                        className="btn-small btn-edit"
+                                        onClick={() => handleEdit(user)}
+                                    >
+                                        Edit
+                                    </button>
+                                    {user.is_active ? (
+                                        <button
+                                            className="btn-small btn-danger"
+                                            onClick={() => handleDeactivate(user.id)}
+                                        >
+                                            Deactivate
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="btn-small btn-activate"
+                                            onClick={() => handleActivate(user.id)}
+                                        >
+                                            Activate
+                                        </button>
+                                    )}
+                                    <button
+                                        className="btn-small btn-delete"
+                                        onClick={() => handleDelete(user.id, user.username)}
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             {showModal && (
                 <div className="modal-overlay" onClick={() => setShowModal(false)}>

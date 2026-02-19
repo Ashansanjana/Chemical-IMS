@@ -82,3 +82,55 @@
     margin: 0 auto;
     padding: 0;
 }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+    .panel-header {
+        padding: 1.5rem 1rem;
+    }
+
+    .panel-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .panel-header p {
+        font-size: 0.875rem;
+    }
+
+    .tabs {
+        padding: 0 0.5rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab {
+        padding: 0.875rem 1rem;
+        font-size: 0.8125rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .tab-content {
+        padding: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .panel-header {
+        padding: 1rem 0.75rem;
+    }
+
+    .panel-header h1 {
+        font-size: 1.25rem;
+    }
+
+    .tab {
+        padding: 0.75rem 0.75rem;
+        font-size: 0.75rem;
+    }
+}
