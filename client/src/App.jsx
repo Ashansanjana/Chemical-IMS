@@ -65,6 +65,14 @@ function App() {
                                 >
                                     Reports
                                 </Link>
+                                {isAuthenticated() && !isSuperAdmin() && (
+                                    <Link
+                                        to="/change-password"
+                                        className={`px-4 py-2 rounded-lg transition-all ${isActive('/change-password') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700'}`}
+                                    >
+                                        🔑 Change Password
+                                    </Link>
+                                )}
                                 {isSuperAdmin() && (
                                     <Link
                                         to="/admin"
@@ -115,6 +123,11 @@ function App() {
                             <Link to="/reports" className={`px-3 py-2 rounded-lg whitespace-nowrap text-sm ${isActive('/reports') ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'}`}>
                                 Reports
                             </Link>
+                            {isAuthenticated() && !isSuperAdmin() && (
+                                <Link to="/change-password" className={`px-3 py-2 rounded-lg whitespace-nowrap text-sm ${isActive('/change-password') ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'}`}>
+                                    🔑 Password
+                                </Link>
+                            )}
                             {isSuperAdmin() && (
                                 <Link to="/admin" className={`px-3 py-2 rounded-lg whitespace-nowrap text-sm ${isActive('/admin') ? 'bg-orange-600 text-white' : 'bg-slate-700 text-orange-300'}`}>
                                     🔐 Admin
