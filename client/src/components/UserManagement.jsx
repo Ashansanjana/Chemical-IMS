@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { getToken } from '../lib/auth'
 import { API_URL } from '../lib/api'
+import ConfirmDialog from './ConfirmDialog'
 import './UserManagement.css'
 
 export default function UserManagement() {
@@ -16,6 +17,23 @@ export default function UserManagement() {
         fullName: '',
         role: 'ADMIN'
     })
+    const [confirmDialog, setConfirmDialog] = useState({
+        isOpen: false,
+        type: 'danger',
+        title: '',
+        message: '',
+        confirmText: 'Confirm',
+        onConfirm: null
+    })
+
+    const openConfirm = (options) => {
+        setConfirmDialog({ isOpen: true, ...options })
+    }
+
+    const closeConfirm = () => {
+        setConfirmDialog(prev => ({ ...prev, isOpen: false, onConfirm: null }))
+    }
+
 
     useEffect(() => {
         fetchUsers()
@@ -96,54 +114,98 @@ export default function UserManagement() {
         }
     }
 
-    const handleActivate = async (userId) => {
-        if (!confirm('Are you sure you want to activate this user?')) return
+    const handleActivate = (userId) => {
+        openConfirm({
+            type: 'info',
+            title: 'Activate User',
+            message: 'Are you sure you want to activate this user? They will regain full access.',
+            confirmText: 'Yes, Activate',
+            onConfirm: async () => {
+                closeConfirm()
+                try {
+                    const response = await fetch(`${API_URL}/api/users/${userId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${getToken()}`
+                        },
+                        body: JSON.stringify({ isActive: true })
+                    })
 
-        try {
-            const response = await fetch(`${API_URL}/api/users/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
-                },
-                body: JSON.stringify({ isActive: true })
-            })
+                    if (!response.ok) {
+                        const error = await response.json()
+                        toast.error(error.error || 'Failed to activate user')
+                        return
+                    }
 
-            if (!response.ok) {
-                const error = await response.json()
-                toast.error(error.error || 'Failed to activate user')
-                return
+                    toast.success('User activated successfully')
+                    fetchUsers()
+                } catch (error) {
+                    console.error('Failed to activate user:', error)
+                    toast.error('Failed to activate user')
+                }
             }
-
-            toast.success('User activated successfully')
-            fetchUsers()
-        } catch (error) {
-            console.error('Failed to activate user:', error)
-            toast.error('Failed to activate user')
-        }
+        })
     }
 
-    const handleDeactivate = async (userId) => {
-        if (!confirm('Are you sure you want to deactivate this user?')) return
+    const handleDeactivate = (userId) => {
+        openConfirm({
+            type: 'warning',
+            title: 'Deactivate User',
+            message: 'This user will lose access to the system. You can re-activate them later.',
+            confirmText: 'Yes, Deactivate',
+            onConfirm: async () => {
+                closeConfirm()
+                try {
+                    const response = await fetch(`${API_URL}/api/users/${userId}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${getToken()}` }
+                    })
 
-        try {
-            const response = await fetch(`${API_URL}/api/users/${userId}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${getToken()}` }
-            })
+                    if (!response.ok) {
+                        const error = await response.json()
+                        toast.error(error.error || 'Failed to deactivate user')
+                        return
+                    }
 
-            if (!response.ok) {
-                const error = await response.json()
-                toast.error(error.error || 'Failed to deactivate user')
-                return
+                    toast.success('User deactivated successfully')
+                    fetchUsers()
+                } catch (error) {
+                    console.error('Failed to deactivate user:', error)
+                    toast.error('Failed to deactivate user')
+                }
             }
+        })
+    }
 
-            toast.success('User deactivated successfully')
-            fetchUsers()
-        } catch (error) {
-            console.error('Failed to deactivate user:', error)
-            toast.error('Failed to deactivate user')
-        }
+    const handleDelete = (userId, username) => {
+        openConfirm({
+            type: 'danger',
+            title: 'Permanently Delete User',
+            message: `You are about to permanently delete "${username}". This action cannot be undone and all their data will be lost.`,
+            confirmText: 'Delete Permanently',
+            onConfirm: async () => {
+                closeConfirm()
+                try {
+                    const response = await fetch(`${API_URL}/api/users/${userId}/permanent`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${getToken()}` }
+                    })
+
+                    if (!response.ok) {
+                        const error = await response.json()
+                        toast.error(error.error || 'Failed to delete user')
+                        return
+                    }
+
+                    toast.success('User permanently deleted')
+                    fetchUsers()
+                } catch (error) {
+                    console.error('Failed to delete user:', error)
+                    toast.error('Failed to delete user')
+                }
+            }
+        })
     }
 
     if (loading) {
@@ -214,6 +276,12 @@ export default function UserManagement() {
                                         Activate
                                     </button>
                                 )}
+                                <button
+                                    className="btn-small btn-delete"
+                                    onClick={() => handleDelete(user.id, user.username)}
+                                >
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -236,15 +304,17 @@ export default function UserManagement() {
                                 />
                             </div>
 
-                            <div className="form-group">
-                                <label>Password {editingUser && '(leave empty to keep current)'}</label>
-                                <input
-                                    type="password"
-                                    value={formData.password}
-                                    onChange={e => setFormData({ ...formData, password: e.target.value })}
-                                    required={!editingUser}
-                                />
-                            </div>
+                            {!editingUser && (
+                                <div className="form-group">
+                                    <label>Password</label>
+                                    <input
+                                        type="password"
+                                        value={formData.password}
+                                        onChange={e => setFormData({ ...formData, password: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                            )}
 
                             <div className="form-group">
                                 <label>Full Name</label>
@@ -288,6 +358,17 @@ export default function UserManagement() {
                     </div>
                 </div>
             )}
+
+            <ConfirmDialog
+                isOpen={confirmDialog.isOpen}
+                type={confirmDialog.type}
+                title={confirmDialog.title}
+                message={confirmDialog.message}
+                confirmText={confirmDialog.confirmText}
+                cancelText="Cancel"
+                onConfirm={confirmDialog.onConfirm}
+                onCancel={closeConfirm}
+            />
         </div>
     )
 }

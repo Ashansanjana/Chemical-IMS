@@ -89,6 +89,61 @@ router.get('/verify', (req, res) => {
     })
 })
 
+// Change password endpoint (for logged-in users)
+router.post('/change-password', async (req, res) => {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if (!token) return res.status(401).json({ error: 'Access token required' })
+
+    const { verifyToken } = await import('../middleware/auth.js')
+    const payload = verifyToken(token)
+    if (!payload) return res.status(403).json({ error: 'Invalid or expired token' })
+
+    const { currentPassword, newPassword } = req.body
+
+    if (!currentPassword || !newPassword) {
+        return res.status(400).json({ error: 'Current and new password are required' })
+    }
+
+    if (newPassword.length < 6) {
+        return res.status(400).json({ error: 'New password must be at least 6 characters' })
+    }
+
+    try {
+        // Get current user
+        const { data: user, error } = await supabase
+            .from('admin_users')
+            .select('id, password_hash')
+            .eq('id', payload.id)
+            .single()
+
+        if (error || !user) {
+            return res.status(404).json({ error: 'User not found' })
+        }
+
+        // Verify current password
+        if (!verifyPassword(currentPassword, user.password_hash)) {
+            return res.status(400).json({ error: 'Current password is incorrect' })
+        }
+
+        // Update password
+        const { error: updateError } = await supabase
+            .from('admin_users')
+            .update({ password_hash: hashPassword(newPassword) })
+            .eq('id', payload.id)
+
+        if (updateError) {
+            console.error('Error updating password:', updateError)
+            return res.status(500).json({ error: 'Failed to update password' })
+        }
+
+        res.json({ success: true, message: 'Password changed successfully' })
+    } catch (error) {
+        console.error('Change password error:', error)
+        res.status(500).json({ error: 'Server error' })
+    }
+})
+
 // Logout endpoint (client-side token removal)
 router.post('/logout', (req, res) => {
     res.json({ success: true, message: 'Logged out successfully' })

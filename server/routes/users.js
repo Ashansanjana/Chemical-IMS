@@ -14,6 +14,7 @@ router.get('/', authenticateToken, requireSuperAdmin, async (req, res) => {
         const { data: users, error } = await supabase
             .from('admin_users')
             .select('id, username, email, full_name, role, is_active, created_at, last_login')
+            .eq('role', 'ADMIN')
             .order('created_at', { ascending: false })
 
         if (error) {
@@ -197,6 +198,44 @@ router.delete('/:id',
             })
         } catch (error) {
             console.error('Delete user error:', error)
+            res.status(500).json({ error: 'Server error' })
+        }
+    }
+)
+
+/**
+ * DELETE /api/users/:id/permanent - Permanently delete admin user (Super Admin only)
+ */
+router.delete('/:id/permanent',
+    authenticateToken,
+    requireSuperAdmin,
+    logActivity('DELETE', 'admin_users'),
+    async (req, res) => {
+        try {
+            const { id } = req.params
+
+            // Prevent user from deleting themselves
+            if (id === req.user.id) {
+                return res.status(400).json({ error: 'Cannot delete your own account' })
+            }
+
+            // Hard delete
+            const { error } = await supabase
+                .from('admin_users')
+                .delete()
+                .eq('id', id)
+
+            if (error) {
+                console.error('Error deleting user:', error)
+                return res.status(500).json({ error: 'Failed to delete user' })
+            }
+
+            res.json({
+                success: true,
+                message: 'User permanently deleted'
+            })
+        } catch (error) {
+            console.error('Permanent delete error:', error)
             res.status(500).json({ error: 'Server error' })
         }
     }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import UserManagement from './UserManagement'
 import StockTransactions from './StockTransactions'
+import ChangePassword from './ChangePassword'
 import './SuperAdminPanel.css'
 
 export default function SuperAdminPanel() {
@@ -26,13 +27,19 @@ export default function SuperAdminPanel() {
                 >
                     📦 Stock Transactions
                 </button>
+                <button
+                    className={`tab ${activeTab === 'password' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('password')}
+                >
+                    🔑 Change Password
+                </button>
             </div>
 
             <div className="tab-content">
                 {activeTab === 'users' && <UserManagement />}
                 {activeTab === 'stock' && <StockTransactions />}
+                {activeTab === 'password' && <ChangePassword />}
             </div>
         </div>
     )
 }
-

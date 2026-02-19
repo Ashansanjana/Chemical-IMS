@@ -8,6 +8,7 @@ import MonthlyReport from './components/MonthlyReport'
 import Login from './components/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 import SuperAdminPanel from './components/SuperAdminPanel'
+import ChangePassword from './components/ChangePassword'
 import { logout, getUser, isAuthenticated, isSuperAdmin } from './lib/auth'
 
 function App() {
@@ -156,6 +157,11 @@ function App() {
                     <Route path="/admin" element={
                         <ProtectedRoute requiredRole="SUPER_ADMIN">
                             <SuperAdminPanel />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/change-password" element={
+                        <ProtectedRoute>
+                            <ChangePassword />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<Navigate to="/" replace />} />
