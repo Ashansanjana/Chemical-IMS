@@ -107,7 +107,7 @@ function App() {
                         </div>
 
                         {/* Mobile Navigation */}
-                        <nav className="md:hidden mt-4 flex overflow-x-auto space-x-2 pb-2">
+                        <nav className="md:hidden mt-4 flex overflow-x-auto space-x-2 pb-2 items-center">
                             <Link to="/" className={`px-3 py-2 rounded-lg whitespace-nowrap text-sm ${isActive('/') ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'}`}>
                                 Dashboard
                             </Link>
@@ -132,6 +132,14 @@ function App() {
                                 <Link to="/admin" className={`px-3 py-2 rounded-lg whitespace-nowrap text-sm ${isActive('/admin') ? 'bg-orange-600 text-white' : 'bg-slate-700 text-orange-300'}`}>
                                     🔐 Admin
                                 </Link>
+                            )}
+                            {isAuthenticated() && (
+                                <button
+                                    onClick={logout}
+                                    className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg whitespace-nowrap text-sm font-medium flex-shrink-0"
+                                >
+                                    Logout
+                                </button>
                             )}
                         </nav>
                     </div>
